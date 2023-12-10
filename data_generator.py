@@ -10,7 +10,7 @@ fake = Faker()
 def generate_shipment():
     return Shipments(
         Date_Of_Shipment=fake.date_this_decade(),
-        Volume_Of_Shipments=fake.random_int(min=1, max=50),
+        Volume_Of_Shipment=fake.random_int(min=1, max=50),
         Sale_Price=round(random.uniform(100, 5500), 2)
     )
 
