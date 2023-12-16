@@ -56,3 +56,25 @@ def delete(db: Session, product_id: int) -> None:
     """Deletes a product with given Id"""
     db.delete(db.query(Products).get(product_id))
     db.commit()
+
+
+def get_all(db: Session, per_page: int, page: int, _by: str) -> List[Products]:
+    """Get all orders"""
+    if _by == "Id" or _by == "id":
+        obj = Products.Id
+    elif _by == "name":
+        obj = Products.Full_Name
+    elif _by == "price":
+        obj = Products.Purchase_Price
+    elif _by == "date":
+        obj = Products.Expiration_Date
+    elif _by == "unit":
+        obj = Products.Unit_Of_Measurement
+    else:
+        obj = Products.Id
+    return (
+        db.query(Products())
+        .order_by(obj)
+        .slice(page * per_page, page * per_page + per_page)
+        .all()
+    )

@@ -54,3 +54,23 @@ def delete(db: Session, enterprise_id: int) -> None:
     """Deletes an enterprise with given Id"""
     db.delete(db.query(Enterprise).get(enterprise_id))
     db.commit()
+
+
+def get_all(db: Session, per_page: int, page: int, _by: str) -> List[Enterprise]:
+    """Get all orders"""
+    if _by == "Id" or _by == "id":
+        obj = Enterprise.Id
+    elif _by == "number":
+        obj = Enterprise.Number_Of_Workers
+    elif _by == "name":
+        obj = Enterprise.Name_Of_Enterprise
+    elif _by == "activity":
+        obj = Enterprise.Activity_Type
+    else:
+        obj = Enterprise.Id
+    return (
+        db.query(Enterprise())
+        .order_by(obj)
+        .slice(page * per_page, page * per_page + per_page)
+        .all()
+    )

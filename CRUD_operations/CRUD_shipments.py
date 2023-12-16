@@ -55,3 +55,23 @@ def delete(db: Session, shipment_id: int) -> None:
     """Deletes a shipment with given Id"""
     db.delete(db.query(Shipments).get(shipment_id))
     db.commit()
+
+
+def get_all(db: Session, per_page: int, page: int, _by: str) -> List[Shipments]:
+    """Get all orders"""
+    if _by == "Id" or _by == "id":
+        obj = Shipments.Id
+    elif _by == "date":
+        obj = Shipments.Date_Of_Shipment
+    elif _by == "volume":
+        obj = Shipments.Volume_Of_Shipment
+    elif _by == "price":
+        obj = Shipments.Sale_Price
+    else:
+        obj = Shipments.Id
+    return (
+        db.query(Shipments())
+        .order_by(obj)
+        .slice(page * per_page, page * per_page + per_page)
+        .all()
+    )
