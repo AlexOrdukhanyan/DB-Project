@@ -39,11 +39,14 @@ fake_product_names = [
 ]
 
 
-def generate_shipment():
+def generate_shipment(product_id_range: tuple, enterprise_id_range: tuple):
     return Shipments(
         Date_Of_Shipment=fake.date_this_decade(),
         Volume_Of_Shipment=fake.random_int(min=1, max=50),
-        Sale_Price=round(random.uniform(100, 5500), 2)
+        Sale_Price=round(random.uniform(100, 5500), 2),
+
+        Enterprise_Id=fake.random_int(min=enterprise_id_range[0], max=enterprise_id_range[1]),
+        Product_Id=fake.random_int(min=product_id_range[0], max=product_id_range[1]),
     )
 
 
