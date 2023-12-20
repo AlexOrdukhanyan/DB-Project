@@ -46,7 +46,7 @@ def generate_shipment(product_id_range: tuple, enterprise_id_range: tuple):
         Sale_Price=round(random.uniform(100, 5500), 2),
 
         Enterprise_Id=fake.random_int(min=enterprise_id_range[0], max=enterprise_id_range[1]),
-        Product_Id=fake.random_int(min=product_id_range[0], max=product_id_range[1]),
+        Products_Id=fake.random_int(min=product_id_range[0], max=product_id_range[1]),
     )
 
 

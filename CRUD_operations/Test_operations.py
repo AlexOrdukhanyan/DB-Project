@@ -8,7 +8,7 @@ import datetime
 from generators import generate_shipments, generate_products, generate_enterprises
 
 
-def get_purchase_price_mean(db: Session) -> int:
+def get_price_mean(db: Session) -> int:
     """Get mean of purchase prices"""
     data = db.query(func.round(func.avg(Products.Purchase_Price))).scalar()
     return data
@@ -38,7 +38,7 @@ def get_join_of_products_and_shipments(db: Session, per_page: int, page: int) ->
     return result
 
 
-def get_orders_count_for_products(db: Session, per_page: int, page: int) -> list:
+def get_shipments_count_for_products(db: Session, per_page: int, page: int) -> list:
     """Get shipment count for products"""
     data = (
         db.query(Products, func.count(Products.Shipments).label("Shipment_Count"))
@@ -61,7 +61,7 @@ def get_orders_count_for_products(db: Session, per_page: int, page: int) -> list
     return result
 
 
-def get_workers_with_purchase_price(db: Session, volume: int, per_page: int, page: int) -> list:
+def get_products_volume(db: Session, volume: int, per_page: int, page: int) -> list:
     """Get products with given volume or above"""
     subquery = (
         db.query(Shipments.Products_Id)
@@ -87,7 +87,7 @@ def get_workers_with_purchase_price(db: Session, volume: int, per_page: int, pag
     return result
 
 
-def update_post(db: Session, new_price: str, exp_date: datetime) -> None:
+def update_price(db: Session, new_price: float, exp_date: datetime) -> None:
     """Update sale price, where expiration date is bigger, than given"""
     subquery = (
         db.query(Shipments.Id)
@@ -100,7 +100,7 @@ def update_post(db: Session, new_price: str, exp_date: datetime) -> None:
     db.commit()
 
 
-def generate_products_by_amount(db: Session, amount: int) -> str:
+def generate_products_amount(db: Session, amount: int) -> str:
     """Generate products by given amount"""
     data = generate_products(amount)
     db.add_all(data)
@@ -108,7 +108,7 @@ def generate_products_by_amount(db: Session, amount: int) -> str:
     return "Successfully created products"
 
 
-def generate_enterprises_by_amount(db: Session, amount: int) -> str:
+def generate_enterprises_amount(db: Session, amount: int) -> str:
     """Generate enterprises by given amount"""
     data = generate_enterprises(amount)
     db.add_all(data)
@@ -116,9 +116,9 @@ def generate_enterprises_by_amount(db: Session, amount: int) -> str:
     return "Successfully created enterprises"
 
 
-def generate_shipments_by_amount(db: Session, amount: int, project_id_range: tuple, worker_id_range: tuple) -> str:
+def generate_shipments_amount(db: Session, amount: int, product_id_range: tuple, enterprise_id_range: tuple) -> str:
     """Generate some shipments by given amount"""
-    data = generate_shipments(amount, project_id_range, worker_id_range)
+    data = generate_shipments(amount, product_id_range, enterprise_id_range)
     db.add_all(data)
     db.commit()
     return "Successfully created shipments"
