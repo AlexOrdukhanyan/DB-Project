@@ -87,7 +87,7 @@ def get_products_volume(db: Session, volume: int, per_page: int, page: int) -> l
     return result
 
 
-def update_price(db: Session, new_price: float, exp_date: datetime) -> None:
+def update_price(db: Session, new_price: float, exp_date: datetime) -> str:
     """Update sale price, where expiration date is bigger, than given"""
     subquery = (
         db.query(Shipments.Id)
@@ -98,6 +98,7 @@ def update_price(db: Session, new_price: float, exp_date: datetime) -> None:
         {"Sale_Price": new_price}
     )
     db.commit()
+    return "Updated successfully"
 
 
 def generate_products_amount(db: Session, amount: int) -> str:
@@ -122,3 +123,23 @@ def generate_shipments_amount(db: Session, amount: int, product_id_range: tuple,
     db.add_all(data)
     db.commit()
     return "Successfully created shipments"
+
+
+def group_sort_by_unit(db: Session, per_page: int, page: int) -> list:
+    """Group by Unit of Measurement and sort by Purchase Price"""
+    data = (
+        db.query(Products)
+        .group_by(Products.Unit_Of_Measurement)
+        .order_by(func.avg(Products.Purchase_Price))
+        .slice(page * per_page, page * per_page + per_page)
+        .all()
+    )
+    result = []
+    for product in data:
+        result.append(
+            {
+                "Unit_Of_Measurement": product.Unit_Of_Measurement,
+                "Average__Purchse_Price": func.avg(product.Purchase_Price),
+            }
+        )
+        return result

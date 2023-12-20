@@ -25,7 +25,8 @@ app.include_router(
     router=shipments_router,
     prefix='/shipments',
 )
-pp = generate_shipment((1, 5), (2, 4))
+"""pp = generate_shipment((1, 5), (2, 4))
 print(pp)
 prd = generate_products_by_amount(5, )
 print(*prd)
+"""

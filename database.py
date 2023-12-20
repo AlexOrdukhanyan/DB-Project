@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 engine = create_engine(f"sqlite:///Shipments_DataBase.db", echo=True)
 if engine:
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
+    session = SessionLocal()
 
     def get_db():
         """Get session for DB"""
