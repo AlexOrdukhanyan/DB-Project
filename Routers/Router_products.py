@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
 from typing import List
 
-from database import get_db
+from database import get_db, SessionLocal
 from CRUD_operations.CRUD_products import create, read_all, read_one_by_id, read_one_by_name, update_by_id, delete
 import schemas
 
@@ -19,7 +19,7 @@ def create_product(to_create: schemas.ProductsCreate, db: Session = Depends(get_
         raise RuntimeError("Couldn't create")
 
 
-@router.get("/products/product_id}", response_model=schemas.Products)
+@router.get("/products/{product_id}", response_model=schemas.Products)
 def get_product_by_id(product_id: int, db: Session = Depends(get_db)):
     """Gets product by id"""
     product = read_one_by_id(db, product_id)
@@ -56,6 +56,6 @@ def update_product(product_id: int, to_update: schemas.ProductsCreate, db: Sessi
 
 
 @router.delete("/products/{product_id}")  # no response
-def delete_product(product_id: int, db: Session = Depends(get_db)):
+def delete_product(product_id: int, db: Session = Depends(SessionLocal)):
     """Deletes product by its Id"""
     return delete(db, product_id)

@@ -19,7 +19,7 @@ def create_shipment(to_create: schemas.ShipmentsCreate, db: Session = Depends(ge
         raise RuntimeError("Couldn't create")
 
 
-@router.get("/shipment/shipment_id}", response_model=schemas.Shipments)
+@router.get("/shipment/{shipment_id}", response_model=schemas.Shipments)
 def get_shipment_by_id(shipment_id: int, db: Session = Depends(get_db)):
     """Gets shipment by id"""
     shipment = read_one_by_id(db, shipment_id)

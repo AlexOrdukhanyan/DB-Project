@@ -109,12 +109,11 @@ def generate_products_amount(db: Session, amount: int) -> str:
     return "Successfully created products"
 
 
-def generate_enterprises_amount(db: Session, amount: int) -> str:
+def generate_enterprises_amount(db: Session, amount: int) -> None:
     """Generate enterprises by given amount"""
     data = generate_enterprises(amount)
     db.add_all(data)
     db.commit()
-    return "Successfully created enterprises"
 
 
 def generate_shipments_amount(db: Session, amount: int, product_id_range: tuple, enterprise_id_range: tuple) -> str:

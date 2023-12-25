@@ -4,6 +4,7 @@ import datetime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
 
+
 class Products(Base):
 
     __tablename__ = "Products"
